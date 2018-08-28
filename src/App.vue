@@ -1,6 +1,7 @@
 <template>
   <div id="app">
     <Navbar />
+    <router-view />
   </div>
 </template>
 
@@ -16,4 +17,6 @@ export default {
 </script>
 
 <style>
+@import url('https://fonts.googleapis.com/css?family=Lobster');
+
 </style>
