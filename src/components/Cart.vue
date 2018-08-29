@@ -1,57 +1,64 @@
 <template>
-  <section class="section">
-    <div class="container">
-      <article class="media">
-        <figure class="media-left">
-          <p class="image is-64x64">
-            <img src="https://bulma.io/images/placeholders/128x128.png">
-          </p>
-        </figure>
-        <div class="media-content">
-          <div class="content">
-            <p>
-              <strong>John Smith</strong>
-              <small>@johnsmith</small>
-              <small>31m</small>
-              <br> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin ornare magna eros, eu pellentesque tortor vestibulum
-              ut. Maecenas non massa sem. Etiam finibus odio quis feugiat facilisis.
-            </p>
-          </div>
-          <nav class="level is-mobile">
-            <div class="level-left">
-              <a class="level-item">
-                <span class="icon is-small">
-                  <i class="fas fa-reply"></i>
-                </span>
-              </a>
-              <a class="level-item">
-                <span class="icon is-small">
-                  <i class="fas fa-retweet"></i>
-                </span>
-              </a>
-              <a class="level-item">
-                <span class="icon is-small">
-                  <i class="fas fa-heart"></i>
-                </span>
-              </a>
+    <section class="section">
+        <div class="container">
+            <div class="columns">
+                <div class="column is-8 is-offset-2">
+                    <div v-for="product in getProducts" :key="product._id" class="box has-background-light">
+                        <div class="cart">
+                            <figure class="image is-128x128">
+                                <img :src="product.img"></figure>
+                                <div class="cart-content">
+                                    <p class="title">{{ product.title }}</p>
+                                    <p class="has-text-weight-semibold">{{ product.price }}</p>
+                                    <div class="buttons">
+                                        <a class="button is-primary">Buy</a>
+                                        <a class="button is-danger" @click="removeProduct(product._id)">Remove</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="buy-button">
+                  <a class="button is-primary">Buy All</a>
+                </div>
             </div>
-          </nav>
-        </div>
-        <div class="media-right">
-          <button class="delete"></button>
-        </div>
-      </article>
-    </div>
-  </section>
-</template>
+        </section>
+    </template>
 
 
 <script>
-  export default {
+import { mapGetters, mapActions } from 'vuex'
 
+export default {
+  computed: {
+    ...mapGetters('cart', ['getProducts', 'cartTotalPrice'])
+  },
+  methods: {
+    ...mapActions('cart',['removeItem']),
+    removeProduct(id) {
+      this.removeItem(id)
+    }
   }
+}
 </script>
 
 
 <style scoped>
+.cart {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+
+.cart-content {
+  margin-left: 2em;
+}
+
+.buy-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 </style>

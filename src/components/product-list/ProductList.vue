@@ -2,12 +2,9 @@
     <div>
      <div  class="columns is-multiline">
        <div v-for="product in products" :key="product._id" class="column is-3">
-          <figure class="image is-4by3">
-            <router-link :to="'/product/'+product._id">
-              <img :src="product.img">
-            <!-- <p>{{ product.title }}</p> -->
-            </router-link>
-        </figure>
+         <router-link :to="'/product/'+product._id">
+            <card :product="product" />
+         </router-link>
        </div>
      </div>
      <div class="pagination">
@@ -23,9 +20,13 @@
 
 <script>
 import Api from '../../services/Api'
+import Card from '../UX/Card'
 
 export default {
-  props: ['address'],   
+  props: ['address'],
+  components: {
+    Card
+  },
   data () {
     return {
       products: [],

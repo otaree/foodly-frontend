@@ -11,8 +11,8 @@
           <h2 class="title">{{ product.title }}</h2>
           <p>{{ product.description }}</p>
           <div class="buttons">
-            <a class="button is-primary">Buy</a>
-            <a class="button">Add to Cart</a>
+            <buy-button />
+            <a class="button" @click="addToCart">Add to Cart</a>
           </div>
         </div>
       </div>
@@ -21,9 +21,14 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
 import Api from '../services/Api'
+import BuyButton from './UX/BuyButton'
 
 export default {
+  components: {
+    BuyButton
+  },
   data () {
     return {
       product: {}
@@ -34,6 +39,12 @@ export default {
        this.product = (await Api.get(`/products/${this.$route.params.id}`)).data
     } catch (e) {
       console.error(e)
+    }
+  },
+  methods: {
+    ...mapActions('cart',['addItem']),
+    addToCart() {
+      this.addItem(this.product);
     }
   }
 }
