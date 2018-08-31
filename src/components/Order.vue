@@ -1,18 +1,18 @@
 <template>
     <section class="section">
         <div class="container">
-        <address-form v-if="!formFiled" />
+        <address-form v-if="editForm" @addressAdded="editForm = false" />
         <div v-else class="columns">
             <div class="column is-8">
                 <div class="card">
                     <div class="card-content">
                         <h4 class="is-text-4 has-text-weight-semibold ">Your Adress</h4>
-                        <p class="has-text-weight-light">Name:
-                            {{ name }}</p>
-                        <p class="has-text-weight-light">Email:
-                            {{ email }}</p>
-                        <p class="has-text-weight-light">Address:</p>
-                        <p class="has-text-weight-light">{{ address }}</p>
+                        <p class="has-text-weight-light">Phone: {{ address.phone }}</p>
+                        <p class="has-text-weight-light">Line one: {{ address.addressLine1 }}</p>
+                        <p class="has-text-weight-light">Line one: {{ address.addressLine2 }}</p>
+                        <p class="has-text-weight-light">City: {{ address.city }}</p>
+                        <p class="has-text-weight-light">Pincode: {{ address.pincode }}</p>
+                        <p class="has-text-weight-light">State: {{ address.state }}</p>
                     </div>
                     <div class="card-footer">
                         <a class="card-footer-item" @click="edit">Edit</a>
@@ -20,12 +20,12 @@
                 </div>
             </div>
             <div class="column">
-                <buy-button
+                <!-- <buy-button
                     :name="name"
                     :address="address"
                     :email="email"
-                    :total="cartTotalPrice"/>
-            </div>
+                    :total="cartTotalPrice"/>-->
+            </div> 
         </div>
     </div>
 
@@ -35,28 +35,37 @@
 <script>
 import store from '../store'
 import { mapGetters } from 'vuex'
-import AddressForm from './UX/AdressForm'
-import BuyButton from './UX/BuyButton'
+import AddressForm from './UX/AddressForm'
+// import BuyButton from './UX/BuyButton'
 
 
 export default {
     components: {
-        BuyButton,
+        // BuyButton,
         AddressForm
     },
     data () {
         return {
-            
-            formFiled: false
+            editForm: false
         }
     },
     computed: {
         ...mapGetters('cart', ['cartTotalPrice']),
-        ...mapGetters('user', ['getAddress'])
+        ...mapGetters('user', ['getAddress']),
+        address () {
+            return this.getAddress
+        }
     },
     methods: {
+        edit () {
+            this.editForm = true
+        }
     },
-     beforeRouteEnter (to, from, next) {
+    created () {
+        const isAddressEmpty = Object.keys(this.getAddress).length === 0 
+        this.editForm = isAddressEmpty
+    },
+    beforeRouteEnter (to, from, next) {
          if (store.state.user.token.trim() === '') {
              next({ path: '/auth'})
          } else {

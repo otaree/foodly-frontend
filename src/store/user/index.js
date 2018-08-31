@@ -3,7 +3,8 @@ import Api from '../../services/Api'
 const state = {
   token: '',
   email: '',
-  address: {}
+  address: {
+  }
 }
 
 const SET_USER = 'SET_USER'
@@ -20,7 +21,7 @@ const mutations = {
   [SET_USER]: (state, payload) => {
     state.token = payload.user.token
     state.email = payload.user.email
-    if (!payload.address) return
+    if (typeof payload.address === 'object' && Object.keys(payload.address).length === 0) return
     state.address = payload.user.address
   },
   [DELETE_USER]: (state) => {
@@ -49,10 +50,22 @@ const actions = {
       commit(SET_USER, { user: { token, ...user } })
       return Promise.resolve()
     } catch (e) {
+      console.log(e)
       return Promise.reject(e.response.data)
     }
   },
-  logout: ({ commit }) => commit(DELETE_USER)
+  logout: ({ commit }) => commit(DELETE_USER),
+  setAddress: async ({ commit }, payload) => {
+    try {
+      const response = await Api.post('/user/setaddress', { ...payload.address }, { headers: {
+        'Authorization': `Bearer ${payload.token}`
+      } })
+      commit(SET_ADDRESS, { address: payload.address })
+      return Promise.resolve(response.data)
+    } catch (error) {
+      return Promise.reject(error.response.data)
+    }
+  }
 }
 
 export default {
