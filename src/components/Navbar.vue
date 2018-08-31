@@ -28,14 +28,17 @@
                      <router-link class="navbar-item is-tab" to="/cart">
                         Cart
                     </router-link>
+                    <router-link v-show="isAuth" class="navbar-item is-tab" to="/auth">
+                        Login
+                    </router-link>
                 </div>
             </div>
         </nav>
     </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import Api from '../services/Api'
-import axios from 'axios'
 
 export default {
   data () {
@@ -43,6 +46,12 @@ export default {
       isActive: false,
       categories: []
     }
+  },
+  computed: {
+      ...mapGetters('user', ['getToken']),
+      isAuth () {
+          return this.getToken.trim() === ''
+      }
   },
   async created () {
     try {
