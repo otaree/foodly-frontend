@@ -4,10 +4,12 @@ import Products from './components/Products'
 import Category from './components/Category'
 import Product from './components/Product'
 import Cart from './components/Cart'
+import Order from './components/Order'
+import AuthPage from './components/AuthPage'
 
 Vue.use(VueRouter)
 
-export default new VueRouter({
+const router = new VueRouter({
   routes: [
     {
       path: '/',
@@ -25,9 +27,22 @@ export default new VueRouter({
       component: Product
     },
     {
+      path: '/order',
+      name: 'order',
+      component: Order
+    },
+    {
       path: '/cart',
       name: 'cart',
       component: Cart
+    },
+    {
+      path: '/auth',
+      name: 'auth',
+      component: AuthPage
     }
   ]
 })
+
+
+export default router

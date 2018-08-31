@@ -2,9 +2,7 @@
     <div>
      <div  class="columns is-multiline">
        <div v-for="product in products" :key="product._id" class="column is-3">
-         <router-link :to="'/product/'+product._id">
             <card :product="product" />
-         </router-link>
        </div>
      </div>
      <div class="pagination">

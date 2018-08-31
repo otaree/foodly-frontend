@@ -1,6 +1,6 @@
 <template>
   <div>
-    <a class="button btn-buy is-primary" @click="pay">Buy</a>
+    <a class="button btn-buy is-primary is-large" @click="pay">Buy</a>
      <b-modal :active.sync="isImageModalActive" width="70%" @close="close">
             <div class="box">
               <div class="content">
@@ -15,17 +15,18 @@
 
 
 <script>
+import { mapGetters, mapActions } from 'vuex'
 import Vue from 'vue'
+
 import Api from '../../services/Api'
 
+
 let data = {
-  buy: 'YES',
   isImageModalActive: false
 }
 
  var options = {
       "key": "rzp_test_CAenydhGA5oCzc",
-      "amount": "2000", // 2000 paise = INR 20
       "name": "foodly",
       "description": "Purchase Description",
       "image": "/assets/logo.png",
@@ -33,25 +34,40 @@ let data = {
         Api.get(`/orders/purchase/${response.razorpay_payment_id}`)
           .then(res => {
             data.isImageModalActive = true
+            Vue.store.dispatch('cat/clear')
           })
           .catch(err => {
             console.log(err)
             data.isImageModalActive = false
           })
       },
-      "notes": {
-        "address": "Hello World"
-      },
       "theme": {
         "color": "#8c67ef"
       }
     };
-var rzp1 = new Razorpay(options);
+var rzp1;
 export default {
+  props: ['name', 'email', 'address', 'total'],
+  created () {
+    options["notes"] = {
+      "address": this.address 
+    }
+    options["prefill"] = {
+      "name": this.name,
+      "email": this.email
+    }
+    options["amount"] = String(this.cartTotalPrice)
+    rzp1 = new Razorpay(options);
+
+  },
   data () {
     return data
   },
+  computed: {
+        ...mapGetters('cart', ['cartTotalPrice'])
+    },
   methods: {
+
     pay (e) {
       rzp1.open()
       e.preventDefault()
@@ -66,6 +82,6 @@ export default {
 
 <style scoped>
 .btn-buy {
-  margin-right: 0.7rem;
+  width: 100%;
 }
 </style>

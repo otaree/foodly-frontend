@@ -11,7 +11,6 @@
           <h2 class="title">{{ product.title }}</h2>
           <p>{{ product.description }}</p>
           <div class="buttons">
-            <buy-button />
             <a class="button" @click="addToCart">Add to Cart</a>
           </div>
         </div>
@@ -23,12 +22,8 @@
 <script>
 import { mapActions } from 'vuex'
 import Api from '../services/Api'
-import BuyButton from './UX/BuyButton'
 
 export default {
-  components: {
-    BuyButton
-  },
   data () {
     return {
       product: {}
