@@ -1,8 +1,25 @@
-import { ADD_ITEM, REMOVE_ITEM, CLEAR_ITEM } from './mutations.types'
+import { ADD_ITEM, REMOVE_ITEM, CLEAR_ITEM, SET_CART, INCREMENT_QTY, DECREMENT_QTY } from './mutations.types'
 
 
 export default {
-  [ADD_ITEM]: (state, payload) => state.items.push(payload.item),
-  [REMOVE_ITEM]: (state, payload) => state.items = state.items.filter(item => item._id !== payload.id),
-  [CLEAR_ITEM]: state => state.items = []
+  [SET_CART]: (state, payload) => state.items = payload.items,
+  [ADD_ITEM]: (state, payload) => state.items.push({ product: payload.item, qty: 1 }),
+  [REMOVE_ITEM]: (state, payload) => state.items = state.items.filter(item => item.product._id !== payload.id),
+  [CLEAR_ITEM]: state => state.items = [],
+  [INCREMENT_QTY]: (state, payload) => {
+    state.items = state.items.map(item => {
+      if (item.product_id === payload.id) {
+        return item.qty += 1
+      }
+      return item
+    })
+  },
+  [DECREMENT_QTY]: (state, payload) => {
+    state.items = state.items.map(item => {
+      if (item.product_id === payload.id && item.qty > 1) {
+        return item.qty -= 1
+      }
+      return item
+    })
+  }
 }

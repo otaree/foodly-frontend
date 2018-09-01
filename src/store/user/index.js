@@ -43,11 +43,13 @@ const actions = {
       return Promise.reject(e.response.data)
     }
   },
-  login: async ({ commit }, userObject) => {
+  login: async ({ commit, dispatch }, userObject) => {
     try {
-      const response = await Api.post('/login', { email: userObject.email, password: userObject.password })
-      const { token, user } = response.data
+      const response = await Api.post('/login', { email: userObject.email, password: userObject.password, cart: { items: [] } })
+      console.log(response.data)
+      const { token, user, cart } = response.data
       commit(SET_USER, { user: { token, ...user } })
+      dispatch('cart/setCart', cart, { root: true })
       return Promise.resolve()
     } catch (e) {
       console.log(e)

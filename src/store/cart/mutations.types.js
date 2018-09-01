@@ -1,3 +1,6 @@
+export const SET_CART = "SET_CART"
 export const ADD_ITEM = "ADD_ITEM"
 export const REMOVE_ITEM = "REMOVE_ITEM"
 export const CLEAR_ITEM = "CLEAR_ITEM"
+export const INCREMENT_QTY = "INCREMENT_QTY"
+export const DECREMENT_QTY = "DECREMENT_QTY"
