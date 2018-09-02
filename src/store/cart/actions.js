@@ -1,12 +1,18 @@
-import { findIndex } from 'underscore'
+import { findIndex, pick } from 'underscore'
 import Api from '../../services/Api'
 import { ADD_ITEM, REMOVE_ITEM, CLEAR_ITEM, SET_CART, INCREMENT_QTY, DECREMENT_QTY } from './mutations.types'
 
 
 export default {
-  setCart: ({ commit }, cart) => commit(SET_CART, cart.products),
+  setCart: ({ commit }, cart) => {
+    console.log("ACTIONS::::", cart)
+    commit(SET_CART, { items: cart.products})
+  },
   addItem: async ({ state, commit, rootState }, item) => {
-    if (findIndex(state.items, product => product._id === item._id) !== -1) {
+    // JSON.parse(JSON.stringify(obj))
+    const parseItem =  pick(item, 'description', '_id', 'title', 'price')
+    console.log(parseItem)
+    if (findIndex(state.items, product => product._id === parseItem._id) !== -1) {
       return Promise.reject('Item already in cart')
     }
     const token = rootState.user.token
@@ -14,8 +20,8 @@ export default {
       return commit(ADD_ITEM, { item })
     } else {
       try {
-        const cart = await Api.put('/cart/add', { item }, { headers: { 'Authorization': `bearer ${token}` } })
-        commit(SET_CART, { items: cart.products })
+        const response = await Api.put('/cart/add', { item: { product: parseItem, qty: 1 }  }, { headers: { 'Authorization': `bearer ${token}` } })
+        commit(SET_CART, { items: response.data.cart.products })
         return Promise.resolve()
       } catch (error) {
         return Promise.reject()
@@ -28,8 +34,8 @@ export default {
       return commit(INCREMENT_QTY, { productId: id })
     }
     try {
-      const cart = await Api.patch('/cart/increment', { productId: id }, { headers: { 'Authorization': `bearer ${token}` } })
-      commit(SET_CART, cart.products)
+      const response = await Api.patch('/cart/increment', { productId: id }, { headers: { 'Authorization': `bearer ${token}` } })
+      commit(SET_CART, response.data.cart.products)
       return Promise.resolve()
     } catch (error) {
       return Promise.reject()
@@ -41,8 +47,8 @@ export default {
       return commit(DECREMENT_QTY, { productId: id })
     }
     try {
-      const cart = await Api.patch('/cart/decrement', { productId: id }, { headers: { 'Authorization': `bearer ${token}` } })
-      commit(SET_CART, cart.products)
+      const response = await Api.patch('/cart/decrement', { productId: id }, { headers: { 'Authorization': `bearer ${token}` } })
+      commit(SET_CART, response.data.cart.products)
       return Promise.resolve()
     } catch (error) {
       return Promise.reject()
@@ -54,8 +60,8 @@ export default {
       return commit(REMOVE_ITEM, { id })
     } else {
       try {
-        const cart = await Api.patch('/cart/remove', { item: { _id: id } }, { headers: { 'Authorization': `bearer ${token}` } })
-        commit(SET_CART, { items: cart.products })
+        const response = await Api.patch('/cart/remove', { item: { _id: id } }, { headers: { 'Authorization': `bearer ${token}` } })
+        commit(SET_CART, { items: response.data.cart.products })
         return Promise.resolve()
       } catch (error) {
         return Promise.reject()

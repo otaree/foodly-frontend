@@ -5,14 +5,20 @@
                 <div class="column is-8">
                     <div class="clolumns">
                         <div class="column is-10">
-                            <div v-for="product in getProducts" :key="product._id" class="product">
+                            <div v-for="item in items" :key="item.product._id" class="product">
                                 <figure class="image is-128x128" >
-                                    <img :src="product.img">
+                                    <img :src="item.product.img">
                                 </figure>
                                 <div class="product-desciption" style="flex-grow: 8;">
-                                    <h3 class="is-size-5 has-text-black-bis is-capitalized has-text-weight-semibold">{{ product.title }}</h3>
+                                    <h3 class="is-size-5 has-text-black-bis is-capitalized has-text-weight-semibold">{{ item.product.title }}</h3>
+                                    <div class="buttons">
+                                        <a class="button is-danger is-small" @click="removeProduct(item.product._id)">Remove</a>
+                                    </div>
                                 </div>
-                                <p>{{ product.price }}</p>
+                                <p>{{ item.product.price }}</p>
+                            </div>
+                            <div class="buttons is-centered">
+                                <a class="button is-danger is-large">Clear Cart</a>
                             </div>
                         </div>
                     </div>
@@ -41,7 +47,10 @@ import { mapGetters, mapActions } from 'vuex'
 
 export default {
   computed: {
-    ...mapGetters('cart', ['getProducts', 'cartTotalPrice'])
+    ...mapGetters('cart', ['getProducts', 'cartTotalPrice']),
+    items () {
+        return this.getProducts
+    }
   },
   methods: {
     ...mapActions('cart',['removeItem']),
