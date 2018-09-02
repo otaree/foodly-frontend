@@ -26,7 +26,7 @@
 
                     </div>
                      <router-link class="navbar-item is-tab" to="/cart">
-                        Cart
+                        Cart ({{ cartItemNo }})
                     </router-link>
                     <router-link v-show="isAuth" class="navbar-item is-tab" to="/auth">
                         Login
@@ -49,6 +49,10 @@ export default {
   },
   computed: {
       ...mapGetters('user', ['getToken']),
+      ...mapGetters('cart', ['getTotalItem']),
+      cartItemNo () {
+          return this.getTotalItem
+      },
       isAuth () {
           return this.getToken.trim() === ''
       }

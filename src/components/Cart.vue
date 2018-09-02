@@ -1,7 +1,10 @@
 <template>
     <section class="section">
         <div class="container">
-            <div class="columns">
+            <div v-if="getTotalItem === 0" class="notification">
+                <p class="is-size-3 has-text-grey has-text-centered has-text-weight-semibold">No items in the cart</p>
+            </div>
+            <div v-else class="columns">
                 <div class="column is-8">
                     <div class="clolumns">
                         <div class="column is-10">
@@ -11,14 +14,35 @@
                                 </figure>
                                 <div class="product-desciption" style="flex-grow: 8;">
                                     <h3 class="is-size-5 has-text-black-bis is-capitalized has-text-weight-semibold">{{ item.product.title }}</h3>
+                                    <div class="field has-addons">
+                                    <p class="control">
+                                    <a class="button is-small" @click="increment(item.product._id)">
+                                        <span class="icon">
+                                        <i class="fas fa-arrow-up"></i>
+                                        </span>
+                                    </a>
+                                    </p>
+                                    <p class="control">
+                                    <a class="button is-small">
+                                        <span>{{ item.qty }}</span>
+                                    </a>
+                                    </p>
+                                    <p class="control">
+                                    <a class="button is-small" @click="decrement(item.product._id)">
+                                        <span class="icon">
+                                        <i class="fas fa-arrow-down"></i>
+                                        </span>
+                                    </a>
+                                    </p>
+                                </div>
                                     <div class="buttons">
                                         <a class="button is-danger is-small" @click="removeProduct(item.product._id)">Remove</a>
                                     </div>
                                 </div>
-                                <p>{{ item.product.price }}</p>
+                                <p>{{ calculatePrice(item.product.price, item.qty) }}</p>
                             </div>
                             <div class="buttons is-centered">
-                                <a class="button is-danger is-large">Clear Cart</a>
+                                <a class="button is-danger is-large" @click="clearCart">Clear Cart</a>
                             </div>
                         </div>
                     </div>
@@ -47,15 +71,21 @@ import { mapGetters, mapActions } from 'vuex'
 
 export default {
   computed: {
-    ...mapGetters('cart', ['getProducts', 'cartTotalPrice']),
+    ...mapGetters('cart', ['getProducts', 'cartTotalPrice', 'getTotalItem']),
     items () {
         return this.getProducts
     }
   },
   methods: {
-    ...mapActions('cart',['removeItem']),
+    ...mapActions('cart',['removeItem', 'increment', 'decrement', 'clear']),
     removeProduct(id) {
       this.removeItem(id)
+    },
+    calculatePrice(price, times) {
+        return parseInt(price) * parseInt(times)
+    },
+    clearCart () {
+        this.clear()
     }
   }
 }

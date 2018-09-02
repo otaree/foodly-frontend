@@ -5,13 +5,10 @@ import { ADD_ITEM, REMOVE_ITEM, CLEAR_ITEM, SET_CART, INCREMENT_QTY, DECREMENT_Q
 
 export default {
   setCart: ({ commit }, cart) => {
-    console.log("ACTIONS::::", cart)
     commit(SET_CART, { items: cart.products})
   },
   addItem: async ({ state, commit, rootState }, item) => {
-    // JSON.parse(JSON.stringify(obj))
-    const parseItem =  pick(item, 'description', '_id', 'title', 'price')
-    console.log(parseItem)
+    const parseItem =  pick(item, 'description', '_id', 'title', 'price', 'img')
     if (findIndex(state.items, product => product._id === parseItem._id) !== -1) {
       return Promise.reject('Item already in cart')
     }
@@ -35,20 +32,23 @@ export default {
     }
     try {
       const response = await Api.patch('/cart/increment', { productId: id }, { headers: { 'Authorization': `bearer ${token}` } })
-      commit(SET_CART, response.data.cart.products)
+      commit(SET_CART, { items: response.data.cart.products })
       return Promise.resolve()
     } catch (error) {
       return Promise.reject()
     }
   },
   decrement: async ({ state, commit, rootState }, id) => {
+    const item = state.items.find(ele => ele.product._id === id )
+    if (item.qty <= 1) return
+
     const token = rootState.user.token
     if (token.trim().length === 0) {
       return commit(DECREMENT_QTY, { productId: id })
     }
     try {
       const response = await Api.patch('/cart/decrement', { productId: id }, { headers: { 'Authorization': `bearer ${token}` } })
-      commit(SET_CART, response.data.cart.products)
+      commit(SET_CART, { items: response.data.cart.products })
       return Promise.resolve()
     } catch (error) {
       return Promise.reject()

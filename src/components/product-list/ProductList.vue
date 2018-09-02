@@ -53,7 +53,6 @@ export default {
    async fetchProducts (page, limit=8) {
      try {
       const response = await Api(`${this.address}?limit=${limit}&page=${page}`)
-      console.log(response)
       this.products = response.data.products
       this.next = response.data.next
       return Promise.resolve()

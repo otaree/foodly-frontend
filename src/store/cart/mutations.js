@@ -10,16 +10,16 @@ export default {
   [CLEAR_ITEM]: state => state.items = [],
   [INCREMENT_QTY]: (state, payload) => {
     state.items = state.items.map(item => {
-      if (item.product_id === payload.id) {
-        return item.qty += 1
+      if (item.product._id === payload.productId) {
+        return {...item, qty: item.qty + 1 }
       }
       return item
     })
   },
   [DECREMENT_QTY]: (state, payload) => {
     state.items = state.items.map(item => {
-      if (item.product_id === payload.id && item.qty > 1) {
-        return item.qty -= 1
+      if (item.product._id === payload.productId && item.qty > 1) {
+        return { ...item, qty: item.qty - 1}
       }
       return item
     })

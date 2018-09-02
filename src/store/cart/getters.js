@@ -3,5 +3,7 @@ export default {
   getTotalItem:  (state, getters) => {
     return getters.getProducts.length
   },
-  cartTotalPrice: (state, getters) => getters.getProducts.reduce((total, item) => total + parseInt(item.product.price), 0)
+  cartTotalPrice: (state, getters) => {
+    return getters.getProducts.reduce((total, item) => total + parseInt(item.product.price), 0)
+  }
 }
