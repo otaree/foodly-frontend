@@ -1,14 +1,7 @@
 <template>
   <div>
     <a class="button btn-buy is-primary is-large" @click="pay">Buy</a>
-     <b-modal :active.sync="isImageModalActive" width="70%" @close="close">
-            <div class="box">
-              <div class="content">
-                <h3 class="has-text-centered is-text-3">SUCCESS</h3>
-                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Aspernatur cumque sit assumenda reiciendis ut consequuntur ab labore autem velit, praesentium molestias voluptas eum fugit saepe rem repellat. Qui, eum. Quia?</p>
-              </div>
-            </div>
-      </b-modal>
+    <loading-page v-if="isLoading" />
   </div>
   
 </template>
@@ -16,65 +9,69 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
-import Vue from 'vue'
 
+import LoadingPage from './LoadingPage'
 import Api from '../../services/Api'
+import logo from '../../assets/logo.png'
 
 
 let data = {
-  isImageModalActive: false
+  image: logo,
+  isLoading: false
 }
 
  var options = {
       "key": "rzp_test_CAenydhGA5oCzc",
       "name": "foodly",
       "description": "Purchase Description",
-      "image": "/assets/logo.png",
-      "handler": function (response) {
-        Api.get(`/orders/purchase/${response.razorpay_payment_id}`)
-          .then(res => {
-            data.isImageModalActive = true
-            Vue.store.dispatch('cat/clear')
-          })
-          .catch(err => {
-            console.log(err)
-            data.isImageModalActive = false
-          })
-      },
       "theme": {
         "color": "#8c67ef"
       }
     };
 var rzp1;
 export default {
-  props: ['name', 'email', 'address', 'total'],
-  created () {
-    options["notes"] = {
-      "address": this.address 
-    }
-    options["prefill"] = {
-      "name": this.name,
-      "email": this.email
-    }
-    options["amount"] = String(this.cartTotalPrice)
-    rzp1 = new Razorpay(options);
-
-  },
-  data () {
+   data () {
     return data
   },
+  components: {
+    LoadingPage
+  },
   computed: {
-        ...mapGetters('cart', ['cartTotalPrice'])
+        ...mapGetters('cart', ['cartTotalPrice']),
+        ...mapGetters('user', ['getAddress', 'getEmail', 'getToken'])
     },
-  methods: {
+  created () {
+    options["image"] = this.image,
+    options["notes"] = {
+      "address": JSON.stringify(this.getAddress) 
+      }
+    options["prefill"] = {
+      "email": this.getEmail
+     }
+    options["amount"] = String(this.cartTotalPrice)
+    options["handler"] = (response) => {
+        this.isLoading = true
+        Api.get(`/orders/purchase/${response.razorpay_payment_id}`, { headers: { 'Authorization': `bearer ${this.getToken}` } })
+          .then(res => {
+            this.isLoading = false
+            // this.orderData = res.data.order.products
+            this.clear(true)
+            this.$router.push(`/order/successful/${res.data.order._id}`)
+          })
+          .catch(err => {
+            this.isLoading = false
+            console.log(err.response.data)
+          })
+      }
 
+    rzp1 = new Razorpay(options);
+  },
+  methods: {
+    ...mapActions('cart', ['clear']),
     pay (e) {
       rzp1.open()
       e.preventDefault()
-    },
-    close () {
-      this.$router.push('/')
-    }
+    }    
   }
 }
 </script>

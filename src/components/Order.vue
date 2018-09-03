@@ -20,11 +20,7 @@
                 </div>
             </div>
             <div class="column">
-                <!-- <buy-button
-                    :name="name"
-                    :address="address"
-                    :email="email"
-                    :total="cartTotalPrice"/>-->
+                <buy-button />
             </div> 
         </div>
     </div>
@@ -36,12 +32,12 @@
 import store from '../store'
 import { mapGetters } from 'vuex'
 import AddressForm from './UX/AddressForm'
-// import BuyButton from './UX/BuyButton'
+import BuyButton from './UX/BuyButton'
 
 
 export default {
     components: {
-        // BuyButton,
+        BuyButton,
         AddressForm
     },
     data () {

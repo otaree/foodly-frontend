@@ -68,9 +68,9 @@ export default {
       }
     }
   },
-  clear: async ({ state, commit, rootState }) => {
+  clear: async ({ state, commit, rootState }, noApi=false) => {
     const token = rootState.user.token
-    if (token.trim().length === 0) {
+    if (token.trim().length === 0 || noApi) {
       return commit(CLEAR_ITEM)
     } else {
       try {

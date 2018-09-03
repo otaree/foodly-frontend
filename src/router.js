@@ -6,6 +6,7 @@ import Product from './components/Product'
 import Cart from './components/Cart'
 import Order from './components/Order'
 import AuthPage from './components/AuthPage'
+import OrderSuccessful from './components/order/OrderSuccessful'
 
 Vue.use(VueRouter)
 
@@ -40,6 +41,11 @@ const router = new VueRouter({
       path: '/auth',
       name: 'auth',
       component: AuthPage
+    },
+    {
+      path: '/order/successful/:id',
+      name: 'ordersuccessful',
+      component: OrderSuccessful
     }
   ]
 })
