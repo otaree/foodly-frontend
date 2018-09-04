@@ -8,6 +8,7 @@
 </template>
 
 <script>
+import store from '../../store'
 import { mapGetters } from 'vuex'
 import Api from '../../services/Api'
 import OrderPage from './OrderPage'

@@ -10,6 +10,7 @@
         <div class="column is-6">
           <h2 class="title">{{ product.title }}</h2>
           <p>{{ product.description }}</p>
+          <p class="has-text-weight-bold mt-1">&#8377; {{ product.price | toRupee }}</p>
           <div class="buttons">
             <a class="button" @click="addToCart">Add to Cart</a>
           </div>
@@ -46,6 +47,9 @@ export default {
 </script>
 
 <style scoped>
+.mt-1 {
+  margin-top: 2%;
+}
 .buttons {
   margin-top: 2em;
 }

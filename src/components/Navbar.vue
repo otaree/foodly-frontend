@@ -19,25 +19,36 @@
                             Category
                         </a>
                         <div  class="navbar-dropdown is-boxed">
-                            <a v-for="category in categories" :key="category._id" class="navbar-item" @click="navigateTo(category.title, category._id)">
+                            <a v-for="category in categories" :key="category._id" class="navbar-item" @click="navigateTo('category', category.title, category._id)">
                                 {{ category.title }}
                             </a>
                         </div>
 
                     </div>
                      <router-link class="navbar-item is-tab" to="/cart">
-                        Cart ({{ cartItemNo }})
+                        <span><i class="fas fa-shopping-cart"></i></span> ({{ cartItemNo }})
                     </router-link>
-                    <router-link v-show="isAuth" class="navbar-item is-tab" to="/auth">
+                    <router-link v-if="isAuth" class="navbar-item is-tab" to="/auth">
                         Login
                     </router-link>
+                    <div v-else class="navbar-item has-dropdown is-hoverable">
+                         <a class="navbar-link">
+                           <span>
+                               <i class="fas fa-user"></i>
+                           </span>
+                        </a>
+                        <div class="navbar-dropdown is-boxed">
+                            <a class="navbar-item" @click="navigateTo('orderhistory')">orders</a>
+                            <a class="navbar-item" @click="logout">Logout</a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </nav>
     </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import Api from '../services/Api'
 
 export default {
@@ -65,8 +76,13 @@ export default {
     }
   },
   methods: {
-      navigateTo (title, id) {
-          this.$router.push({ name: 'category', params: { title }, query: { id } })
+      ...mapActions('user', ['logout']),
+      navigateTo (name, title='', id='') {
+          if (title !== '') {
+            this.$router.push({ name, params: { title }, query: { id } })
+          } else {
+              this.$router.push({ name })
+          }
       }
   }
 }

@@ -9,7 +9,7 @@
     </div>
     <div class="card-content">
       <p class="has-text-weight-semibold">{{ item.title }}</p>
-      <p class="has-text-weight-semibold">{{ item.price }}</p>
+      <p class="has-text-weight-semibold">&#8377; {{ item.price | toRupee }}</p>
     </div>
     <footer class="card-footer">
       <a v-if="!item.addedToCart" class="card-footer-item" @click="addToCart">Add to Cart</a>

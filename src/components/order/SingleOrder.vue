@@ -1,6 +1,6 @@
 <template>
   <div class="column">
-    <div v-for="item in products" :key="item._id" class="columns">
+    <div v-for="item in products" :key="item._id" class="columns product">
       <div class="column is-8">
         <div class="product-desciption">
           <figure class="image is-128x128">
@@ -8,16 +8,15 @@
           </figure>
           <div>
             <p class="has-text-bold">{{ item.product.title }}</p>
-            <p>{{ item.product.description }}</p>
           </div>
         </div>
       </div>
       <div class="column is-2">
-        <p class="has-text-right">{{ item.product.price }}</p>
+        <p class="has-text-right">{{ item.product.price | toRupee }}</p>
         <p class="has-text-right">x{{ item.qty }}</p>
       </div>
       <div class="column is-2">
-        <p class="has-text-right">{{ item.product.price * item.qty }}</p>
+        <p class="has-text-right">{{ (item.product.price * item.qty) | toRupee }}</p>
       </div>
     </div>
   </div>
@@ -30,6 +29,9 @@ export default {
 </script>
 
 <style scoped>
+.product {
+  margin-bottom: 3%;
+}
 .product-desciption {
   display: flex;
 }

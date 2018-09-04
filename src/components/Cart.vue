@@ -39,7 +39,7 @@
                                         <a class="button is-danger is-small" @click="removeProduct(item.product._id)">Remove</a>
                                     </div>
                                 </div>
-                                <p>{{ calculatePrice(item.product.price, item.qty) }}</p>
+                                <p>&#8377; {{ calculatePrice(item.product.price, item.qty) | toRupee }}</p>
                             </div>
                             <div class="buttons is-centered">
                                 <a class="button is-danger is-large" @click="clearCart">Clear Cart</a>
@@ -52,7 +52,7 @@
                         <div class="card-content">
                             <div class="total-price">
                                 <p class="is-size-5">Total</p>
-                                <p>{{ cartTotalPrice }}</p>
+                                <p>&#8377; {{ cartTotalPrice | toRupee }}</p>
                             </div>
                         </div>
                         <div class="card-footer">

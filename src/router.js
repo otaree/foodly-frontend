@@ -7,6 +7,7 @@ import Cart from './components/Cart'
 import Order from './components/Order'
 import AuthPage from './components/AuthPage'
 import OrderSuccessful from './components/order/OrderSuccessful'
+import OrderHistory from './components/order/OrderHistory'
 
 Vue.use(VueRouter)
 
@@ -46,6 +47,11 @@ const router = new VueRouter({
       path: '/order/successful/:id',
       name: 'ordersuccessful',
       component: OrderSuccessful
+    },
+    {
+      path: '/order/history',
+      name: 'orderhistory',
+      component: OrderHistory
     }
   ]
 })
