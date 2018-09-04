@@ -25,9 +25,7 @@
                         </div>
 
                     </div>
-                     <router-link class="navbar-item is-tab" to="/cart">
-                        <span><i class="fas fa-shopping-cart"></i></span> ({{ cartItemNo }})
-                    </router-link>
+                     
                     <router-link v-if="isAuth" class="navbar-item is-tab" to="/auth">
                         Login
                     </router-link>
@@ -42,6 +40,9 @@
                             <a class="navbar-item" @click="logout">Logout</a>
                         </div>
                     </div>
+                    <router-link class="navbar-item is-tab" to="/cart">
+                        <span><i class="fas fa-shopping-cart"></i></span> ({{ cartItemNo }})
+                    </router-link>
                 </div>
             </div>
         </nav>
