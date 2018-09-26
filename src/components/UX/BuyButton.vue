@@ -72,6 +72,9 @@ export default {
       rzp1.open()
       e.preventDefault()
     }    
+  },
+  beforeDestroy() {
+    rzp1 = null
   }
 }
 </script>

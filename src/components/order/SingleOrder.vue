@@ -3,7 +3,7 @@
     <div v-for="item in products" :key="item._id" class="columns product">
       <div class="column is-8">
         <div class="product-desciption">
-          <figure class="image is-128x128">
+          <figure class="image is-16x16px">
             <img :src="item.product.img">
           </figure>
           <div>
@@ -36,7 +36,8 @@ export default {
   display: flex;
 }
 .image {
-  width: 30%;
+  width: 20%;
+  height: 10%;
   margin-right: 2%;
 }
 </style>
