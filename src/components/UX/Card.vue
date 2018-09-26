@@ -1,6 +1,6 @@
 <template>
   <div class="card">
-    <div class="card-image">
+    <div class="card-image flash">
      <router-link :to="'/product/'+item._id">
         <figure class="image is-4by3">
           <img :src="item.img" alt="Placeholder image">

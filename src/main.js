@@ -2,6 +2,7 @@ import Vue from 'vue'
 import App from './App.vue'
 import Buefy from 'buefy'
 import 'buefy/lib/buefy.css'
+import 'animate.css/animate.min.css'
 import './filters'
 
 
